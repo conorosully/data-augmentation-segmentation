@@ -60,6 +60,7 @@ def main():
     print("Training data: {} images".format(train_len))
     print("Sample: {}".format(args.sample))
     print("Satellite: {}".format(args.satellite))
+    print("Scalled: {}".format(args.scale))
     print("Include bands: {}".format(args.incl_bands))
     print("Target band position: {}".format(args.target_pos))
     print("Model type: {}".format(args.model_type))
