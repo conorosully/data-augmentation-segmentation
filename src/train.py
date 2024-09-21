@@ -36,6 +36,7 @@ def main():
     parser.add_argument("--lr", type=float, default=0.001, help="Learning rate for training")
     parser.add_argument("--split", type=float, default=0.9, help="Train/Validation split")
     parser.add_argument("--early_stopping", type=int, default=-1, help="Number of epochs to wait before stopping training. -1 to disable.")
+    parser.add_argument("--scale", type=bool, default=False, help="Whether to scale the bands")
 
     parser.add_argument("--train_path",type=str,default="../data/training/",help="Path to the training data",)
     parser.add_argument("--save_path",type=str,default="../models/",help="Path template for saving the model",)
@@ -84,6 +85,7 @@ class TrainDataset(torch.utils.data.Dataset):
         self.target = args.target_pos
         self.incl_bands = args.incl_bands
         self.satellite = args.satellite
+        self.scale = args.scale
 
     def __getitem__(self, idx):
         """Get image and binary mask for a given index"""
@@ -97,8 +99,10 @@ class TrainDataset(torch.utils.data.Dataset):
         bands = bands.astype(np.float32) 
 
         # Normalise bands
-        #bands = utils.scale_bands(bands, self.satellite)
+        if self.scale == True:
+            bands = utils.scale_bands(bands, self.satellite)
         #NOTE: For this experiment, the bands are already normalised in the data augmentation step
+        # So only the bands for the original fine-tuning dataset need to be normalised
 
         # Convert to tensor
         bands = bands.transpose(2, 0, 1)
