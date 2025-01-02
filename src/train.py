@@ -19,6 +19,11 @@ from network import U_Net, R2U_Net, AttU_Net, R2AttU_Net
 
 import utils
 
+# names of pretrained models
+lics_pretrained = "LICS_UNET_12JUL2024.pth"
+
+# Unfreeze the decoder
+unfrozen_layers = ['Up5','Up_conv5','Up4','Up_conv4','Up3','Up_conv3','Up2','Up_conv2', 'Conv_1x1']
 
 def main():
     # Define the argument parser
@@ -157,6 +162,14 @@ def load_data(args):
 
     return train_loader, valid_loader
 
+# Function to freeze layers except the final convolutional blocks
+def freeze_layers(model, unfrozen_layers):
+    for name, param in model.named_parameters():
+        param.requires_grad = False
+        for layer in unfrozen_layers:
+            if layer in name:
+                param.requires_grad = True
+                break
 
 def train_model(train_loader, valid_loader, args):
     # define the model
@@ -168,6 +181,15 @@ def train_model(train_loader, valid_loader, args):
         model = AttU_Net(len(args.incl_bands), 2)
     elif args.model_type == "R2AttU_Net":
         model = R2AttU_Net(len(args.incl_bands), 2)
+    elif args.model_type == "LICS_pretrained":
+
+        model = U_Net(len(args.incl_bands),2)
+        state_dict = torch.load(f'/Users/conorosullivan/Documents/git/COASTAL_MONITORING/models/{lics_pretrained}', 
+                                map_location=torch.device('cpu'),
+                                weights_only=True )
+        model.load_state_dict(state_dict)
+        freeze_layers(model, unfrozen_layers)
+
 
     model.to(args.device)
 
