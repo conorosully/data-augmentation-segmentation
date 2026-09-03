@@ -3,7 +3,7 @@ The Impact of Data Augmentations on Coastal Image Segmentation Models
 
 This repository contains the code required to reproduce the results in the conference paper:
 
-> To be updated
+> C. O’Sullivan and S. Dev, "The Impact of Data Augmentations on Coastal Image Segmentation Models," IGARSS 2025 - 2025 IEEE International Geoscience and Remote Sensing Symposium, Brisbane, Australia, 2025, pp. 4950-4954, doi: 10.1109/IGARSS55030.2025.11242440. [available here](https://ieeexplore.ieee.org/abstract/document/11242440).
 
 This code is only for academic and research purposes. Please cite the above paper if you intend to use whole/part of the code. 
 
